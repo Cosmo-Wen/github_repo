@@ -14,6 +14,7 @@ const Container = styled.div `
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-family: Roboto
 `;
 
 const Home = () => {
@@ -32,9 +33,9 @@ const Home = () => {
             <Box padding = {2}>
                 <GitHubIcon sx = {{fontSize: 50}} />
             </Box>
-            <Paper variant = "outlined">
+            <Paper variant = "outlinedcd">
                 <Box padding = {2}>
-                    <body style={{fontFamily: "Roboto", fontSize: "30px"}}>Github Repository Login</body>
+                    <body1 style={{fontSize: "30px"}}>Github Repository Login</body1>
                 </Box>
                 <Box padding = {1}>
                     <TextField
