@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -17,11 +17,14 @@ const Container = styled.div `
     font-family: Roboto
 `;
 
-const Home = () => {
-    const [username, setUsername] = useState("");
-    
+const Home = (props) => {
+    const {username, setUsername} = props;
+
+    const navigate = useNavigate();
+
     const handleClick = () => {
-        console.log("Next");
+        console.log(username);
+        navigate("/" + username)
     };
     
     const handleTextChange = (event) => {
@@ -47,7 +50,7 @@ const Home = () => {
                         onChange = {handleTextChange}
                         onKeyPress = {(e) => {
                             if (e.key === "Enter") {
-                                console.log("Next");
+                                handleClick();
                             }
                         }}
                     />

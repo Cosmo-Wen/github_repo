@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Avatar from '@mui/material/Avatar';
@@ -32,16 +33,20 @@ const List = styled.div `
     overflow-y: scroll;
 `
 
-const Repos = () => {
+const Repos = (props) => {
+    const {username, repo, setrepo} = props;
+
+    const navigate = useNavigate();
+
     const handleClick = () => {
-        console.log("Next");
+        navigate("/" + username + "/" + repo)
     };
     
     return (
         <Container>
             <Profile>
                     <Avatar src = "https://avatars.githubusercontent.com/u/2?v=4" alt = "avatar" sx={{ width: 200, height: 200, margin: 3,}}/>
-                    <body1 style = {{fontSize: "30px"}}>Username</body1>
+                    <body1 style = {{fontSize: "30px"}}>{username}</body1>
                     <Box sx = {{width: 270, height: 270,}} />
             </Profile>
             <Box>

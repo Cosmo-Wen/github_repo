@@ -14,12 +14,14 @@ const Container = styled.div `
     font-family: Roboto
 `;
 
-const Content = () => {
+const Content = (props) => {
+    const {username, repo} = props;
+
     return (
         <Container>
             <Paper variant = "outlined" sx = {{width: 600, height: 600}}>
                 <Link href="https://github.com/" underline="hover">
-                    <h1>Repo Name</h1>
+                    <h1>{username} - {repo}</h1>
                 </Link>
                 <body1> Description </body1>
             </Paper>
