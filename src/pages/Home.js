@@ -23,7 +23,6 @@ const Home = (props) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        console.log(username);
         navigate("/" + username)
     };
     
