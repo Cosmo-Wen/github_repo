@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
@@ -41,6 +41,24 @@ const Repos = () => {
 
     const [avatar, setAvatar] = useState("");
 
+    const [loading, setLoading] = useState(false);
+
+    const [end, setEnd] = useState(10);
+
+    const observer = useRef();
+    
+    const lastRepo = useCallback((r) => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(e => {
+            if (e[0].isIntersecting) {
+                setEnd((prev) => prev + 10);
+                console.log("visable")
+            }
+        });
+        if (r) observer.current.observe(r);
+    }, [loading])
+
     const fetchAvatar = () => {
         return fetch ("https://api.github.com/users/" + username)
         .then((response) => response.json())
@@ -73,6 +91,12 @@ const Repos = () => {
         fetchData();
     }, []); 
 
+
+
+    useEffect(() => {
+        setLoading(false);
+    }, [end]);
+
     return (
         <Container>
             <Profile>
@@ -83,13 +107,31 @@ const Repos = () => {
             <Box>
                 <List><Paper variant = "outlined" sx = {{minWidth: 600, height: 500}}>
                     <Box sx = {{display: "flex", flexDirection: "column"}}>
-                    {userInfo.map((item, idx) => (
-                        <Box key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
-                            <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
-                                {item.name} - {item.count}
-                            </Link>
+                    {userInfo.slice(0, end).map((item, idx) => {
+                        if (end === idx + 1) {
+                            return (
+                                <Box ref = {lastRepo} key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
+                                    <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
+                                        {item.name} - {item.count}
+                                    </Link>
+                                </Box>
+                            )
+                        }
+                        else {
+                            return (
+                                <Box key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
+                                    <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
+                                        {item.name} - {item.count}
+                                    </Link>
+                                </Box>
+                            )
+                        }
+                    })}
+                    {loading &&
+                        <Box sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
+                            <body1 style = {{fontSize: "20px"}}>Loading... </body1>
                         </Box>
-                    ))}      
+                    }      
                     </Box>
                 </Paper></List>
             </Box>
