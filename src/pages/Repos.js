@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Avatar from '@mui/material/Avatar';
@@ -34,18 +34,12 @@ const List = styled.div `
     overflow-y: scroll;
 `
 
-const Repos = (props) => {
-    const {username, repo, setrepo} = props;
+const Repos = () => {
+    const username = useParams().username;
 
-    const [userInfo, setUserInfo] = useState(new Array);
+    const [userInfo, setUserInfo] = useState([]);
 
     const [avatar, setAvatar] = useState("");
-
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate("/" + username + "/" + repo)
-    };
 
     const fetchAvatar = () => {
         return fetch ("https://api.github.com/users/" + username)
@@ -89,10 +83,10 @@ const Repos = (props) => {
             <Box>
                 <List><Paper variant = "outlined" sx = {{minWidth: 600, height: 500}}>
                     <Box sx = {{display: "flex", flexDirection: "column"}}>
-                    {userInfo.map((item) => (
-                        <Box sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
-                            <Link href="#" underline="hover" onClick = {handleClick} style = {{fontSize: "20px"}}>
-                                {item.name}
+                    {userInfo.map((item, idx) => (
+                        <Box key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
+                            <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
+                                {item.name} - {item.count}
                             </Link>
                         </Box>
                     ))}      

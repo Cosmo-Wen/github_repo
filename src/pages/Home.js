@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
@@ -18,7 +18,7 @@ const Container = styled.div `
 `;
 
 const Home = (props) => {
-    const {username, setUsername} = props;
+    const [username, setUsername] = useState("");
 
     const navigate = useNavigate();
 

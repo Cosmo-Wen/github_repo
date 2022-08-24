@@ -1,4 +1,5 @@
-import React from 'react'
+import React , { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Link from '@mui/material/Link';
@@ -15,15 +16,38 @@ const Container = styled.div `
 `;
 
 const Content = (props) => {
-    const {username, repo} = props;
+    const [username, repo] = [useParams().username, useParams().repo];
+
+    const [content, setContent] = useState({
+        name: "",
+        count: "",
+        des: "",
+        url: "",
+    });
+
+    useEffect(() => {
+        const fetchContent = () => {
+            return fetch ("https://api.github.com/repos/" + username + "/" + repo)
+            .then((response) => response.json())
+            .then((data) => {
+                setContent({
+                    name: data.name,
+                    count: data.stargazers_count,
+                    des: data.description,
+                    url: data.html_url,
+                });
+            });
+        }
+        fetchContent();
+    }, []);
 
     return (
         <Container>
             <Paper variant = "outlined" sx = {{width: 600, height: 600}}>
-                <Link href="https://github.com/" underline="hover">
-                    <h1>{username} - {repo}</h1>
+                <Link href = {"https://github.com/" + username + "/" + repo} underline = "hover">
+                    <h1>{content.name} - {content.count}</h1>
                 </Link>
-                <body1> Description </body1>
+                <body1> {content.des} </body1>
             </Paper>
         </Container>
     );
