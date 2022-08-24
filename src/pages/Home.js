@@ -18,9 +18,20 @@ const Container = styled.div `
 `;
 
 const Home = (props) => {
+    const {error} = props;
+
     const [username, setUsername] = useState("");
 
     const navigate = useNavigate();
+
+    var msg;
+
+    if (error) {
+        msg = "Invalid username. Please enter a valid username."
+    }
+    else {
+        msg = "Please enter your username to search for Repos"
+    }
 
     const handleClick = () => {
         navigate("/" + username)
@@ -43,7 +54,7 @@ const Home = (props) => {
                     <TextField
                         id = "outlined-required"
                         label = "Username"
-                        helperText = "Please enter your username to search for Repos"
+                        helperText = {msg}
                         sx = {{display: "flex", justifyContent: "center", marginBottom: "10px", marginX: "20px"}}
                         value = {username}
                         onChange = {handleTextChange}

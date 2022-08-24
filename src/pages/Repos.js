@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Avatar from '@mui/material/Avatar';
@@ -34,7 +34,9 @@ const List = styled.div `
     overflow-y: scroll;
 `
 
-const Repos = () => {
+const Repos = (props) => {
+    const {setError} = props;
+
     const username = useParams().username;
 
     const [userInfo, setUserInfo] = useState([]);
@@ -47,13 +49,14 @@ const Repos = () => {
 
     const observer = useRef();
     
+    const navigate = useNavigate();
+
     const lastRepo = useCallback((r) => {
         if (loading) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(e => {
             if (e[0].isIntersecting) {
                 setEnd((prev) => prev + 10);
-                console.log("visable")
             }
         });
         if (r) observer.current.observe(r);
@@ -61,7 +64,16 @@ const Repos = () => {
 
     const fetchAvatar = () => {
         return fetch ("https://api.github.com/users/" + username)
-        .then((response) => response.json())
+        .then((response) => {
+            if (response.ok) {
+                setError(false);
+                return response.json();
+            }
+            else {
+                navigate("/")
+                setError(true);
+            }
+        })
         .then((data) => {
             setAvatar(data.avatar_url);
         });
@@ -69,7 +81,16 @@ const Repos = () => {
 
     const fetchInfo = () => {
         return fetch ("https://api.github.com/users/" + username + "/repos")
-        .then((response) => response.json())
+        .then((response) => {
+            if (response.ok) {
+                setError(false);
+                return response.json();
+            }
+            else {
+                setError(true);
+                navigate("/")
+            }
+        })
         .then((result) => {
             const list = result.map((item) => {
                 return ({
@@ -121,7 +142,7 @@ const Repos = () => {
                             return (
                                 <Box key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
                                     <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
-                                        {item.name} - {item.count}
+                                        {idx + 1}. {item.name} - {item.count}
                                     </Link>
                                 </Box>
                             )
