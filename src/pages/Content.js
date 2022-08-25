@@ -31,7 +31,7 @@ const Content = (props) => {
             .then((response) => response.json())
             .then((data) => {
                 setContent({
-                    name: data.name,
+                    name: data.full_name,
                     count: data.stargazers_count,
                     des: data.description,
                     url: data.html_url,
@@ -43,7 +43,7 @@ const Content = (props) => {
 
     return (
         <Container>
-            <Paper variant = "outlined" sx = {{width: 600, height: 600}}>
+            <Paper variant = "outlined" sx = {{width: 600, height: 300}}>
                 <Link href = {"https://github.com/" + username + "/" + repo} underline = "hover">
                     <h1>{content.name} - {content.count}</h1>
                 </Link>

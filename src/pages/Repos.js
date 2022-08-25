@@ -43,9 +43,11 @@ const Repos = (props) => {
 
     const [avatar, setAvatar] = useState("");
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    const [end, setEnd] = useState(10);
+    const [page, setPage] = useState(1);
+
+    const [more, setMore] = useState(false);
 
     const observer = useRef();
     
@@ -55,12 +57,12 @@ const Repos = (props) => {
         if (loading) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(e => {
-            if (e[0].isIntersecting) {
-                setEnd((prev) => prev + 10);
+            if (e[0].isIntersecting && more) {
+                setPage(prev => prev + 1)
             }
         });
         if (r) observer.current.observe(r);
-    }, [loading])
+    }, [loading, more])
 
     const fetchAvatar = () => {
         return fetch ("https://api.github.com/users/" + username)
@@ -80,7 +82,7 @@ const Repos = (props) => {
     };
 
     const fetchInfo = () => {
-        return fetch ("https://api.github.com/users/" + username + "/repos")
+        return fetch ("https://api.github.com/users/" + username + "/repos?per_page=10&page=" + page)
         .then((response) => {
             if (response.ok) {
                 setError(false);
@@ -99,7 +101,9 @@ const Repos = (props) => {
                 });
             }
             );
-            setUserInfo(list);
+            setUserInfo(prev => {return [...prev, ...list]});
+            setMore(result.length > 0);
+            setLoading(false);
         });
     };
 
@@ -109,14 +113,13 @@ const Repos = (props) => {
     };
     
     useEffect(() => {
-        fetchData();
+        fetchAvatar();
     }, []); 
 
-
-
     useEffect(() => {
-        setLoading(false);
-    }, [end]);
+        setLoading(true);
+        fetchInfo();
+    }, [page]);
 
     return (
         <Container>
@@ -128,12 +131,12 @@ const Repos = (props) => {
             <Box>
                 <List><Paper variant = "outlined" sx = {{minWidth: 600, height: 500}}>
                     <Box sx = {{display: "flex", flexDirection: "column"}}>
-                    {userInfo.slice(0, end).map((item, idx) => {
-                        if (end === idx + 1) {
+                    {userInfo.map((item, idx) => {
+                        if (userInfo.length === idx + 1) {
                             return (
                                 <Box ref = {lastRepo} key = {idx} sx = {{backgroundColor: "#ededed", padding: 1, margin: 1, height: 40, display: "flex", alignItems: "center"}}>
                                     <Link component={RouterLink} to={"./" + item.name} underline="hover" style = {{fontSize: "20px"}}>
-                                        {item.name} - {item.count}
+                                    {idx + 1}. {item.name} - {item.count}
                                     </Link>
                                 </Box>
                             )
