@@ -43,7 +43,7 @@ const Content = (props) => {
 
     return (
         <Container>
-            <Paper variant = "outlined" sx = {{width: 600, height: 300}}>
+            <Paper variant = "outlined" sx = {{minwidth: 600, height: 300}}>
                 <Link href = {"https://github.com/" + username + "/" + repo} target="_blank" underline = "hover">
                     <h1>{content.name} - {content.count}</h1>
                 </Link>
