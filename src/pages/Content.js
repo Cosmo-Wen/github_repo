@@ -44,7 +44,7 @@ const Content = (props) => {
     return (
         <Container>
             <Paper variant = "outlined" sx = {{width: 600, height: 300}}>
-                <Link href = {"https://github.com/" + username + "/" + repo} underline = "hover">
+                <Link href = {"https://github.com/" + username + "/" + repo} target="_blank" underline = "hover">
                     <h1>{content.name} - {content.count}</h1>
                 </Link>
                 <body1> {content.des} </body1>
