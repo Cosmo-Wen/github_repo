@@ -19,7 +19,7 @@ The project is mainly consist of three layers: Rendering, Routing, and Web Conte
     Content is the repository selected.
 
 ## Questions and Comments
-1. Still very unfamiliar with CSS, especially display, flex, and alignment.
+1. Still very unfamiliar with display, flex, and alignment. I vaguely know what they do, but in practice it is more of a trial and error process to see where it landed or what it did. I would like to know whether the goal is to fully understand how CSS works and can just generate whatever we need by heart, or is it still somewhat of a testing process with combination to an understanding of what to change.
 2. I still don't understand the purpose of useCallback() and its dependencies. The tutorial framed it in a way that makes me feel like its entire purpose is to not make ESLint angry. The explanation on the official website makes sense, but I couldn't make the connection of how it makes the dependencies not required.
 3. Why do we need ESLint? If ESLint warnings do not affect the program from running properly, can we ignore them?
 4. Where does setState() actually execute? I understand React might bundle the hooks and execute them at later or more convenient times. However, sometimes I might want to access the changed state and the state will remain unchanged, requiring extra workarounds.
